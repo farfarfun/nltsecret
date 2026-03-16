@@ -1,6 +1,6 @@
 [project]
 name = "nltsecret"
-version = "1.4.69"
+version = "1.4.70"
 description = "nltsecret"
 readme = "README.md"
 requires-python = ">=3.7"
@@ -23,8 +23,8 @@ email = "farfarfun@qq.com"
 
 [project.urls]
 Organization = "https://github.com/farfarfun"
-Repository = "https://github.com/farfarfun/funsecret"
-Releases = "https://github.com/farfarfun/funsecret/releases"
+Repository = "https://github.com/farfarfun/nltsecret"
+Releases = "https://github.com/farfarfun/nltsecret/releases"
 
 [project.optional-dependencies]
 mysql = [ "pymysql>=1.1.1", "mysqlclient>=2.2.7",]
@@ -33,4 +33,4 @@ mysql = [ "pymysql>=1.1.1", "mysqlclient>=2.2.7",]
 license-files = []
 
 [tool.uv.workspace]
-members = [ "extbuild/funsecret-snapshot",]
+members = [ "extbuild/nltsecret-snapshot",]

@@ -6,7 +6,7 @@ from urllib.parse import quote_plus
 from diskcache import Cache
 from nltlog import getLogger
 
-from funsecret.fernet import decrypt, encrypt
+from nltsecret.fernet import decrypt, encrypt
 
 logger = getLogger("funsecret")
 
