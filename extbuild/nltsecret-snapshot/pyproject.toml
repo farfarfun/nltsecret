@@ -1,10 +1,10 @@
 [project]
-name = "funsecret-snapshot"
-version = "1.4.71"
-description = "funsecret"
+name = "nltsecret-snapshot"
+version = "1.4.72"
+description = "nltsecret"
 readme = "README.md"
 requires-python = ">=3.8"
-dependencies = [ "funsecret", "funtable>=1.0.8",]
+dependencies = [ "nltsecret", "funtable>=1.0.8",]
 [[project.authors]]
 name = "牛哥"
 email = "niuliangtao@qq.com"
@@ -23,11 +23,11 @@ email = "farfarfun@qq.com"
 
 [project.urls]
 Organization = "https://github.com/farfarfun"
-Repository = "https://github.com/farfarfun/funsecret"
-Releases = "https://github.com/farfarfun/funsecret/releases"
+Repository = "https://github.com/farfarfun/nltsecret"
+Releases = "https://github.com/farfarfun/nltsecret/releases"
 
 [tool.setuptools]
 license-files = []
 
-[tool.uv.sources.funsecret]
+[tool.uv.sources.nltsecret]
 workspace = true

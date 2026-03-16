@@ -8,7 +8,7 @@ from nltlog import getLogger
 
 from nltsecret.fernet import decrypt, encrypt
 
-logger = getLogger("funsecret")
+logger = getLogger("nltsecret")
 
 
 class CacheSecretManage:
