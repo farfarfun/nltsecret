@@ -166,6 +166,31 @@ class SecretManage:
         with Session(self.engine) as session:
             return [data for data in session.execute(select(SecretTable)).scalars()]
 
+    def list_secret(self, secret=True):
+        result = {}
+
+        with Session(self.engine) as session:
+            session.execute(
+                delete(SecretTable).where(SecretTable.expire_time < time.time())
+            )
+            session.commit()
+
+            datas = session.execute(select(SecretTable)).scalars()
+            for data in datas:
+                key = self.decrypt(data.key, secret=secret)
+                value = self.decrypt(data.value, secret=secret)
+                parts = [part for part in (key or "").split("--") if part]
+
+                if not parts:
+                    continue
+
+                current = result
+                for part in parts[:-1]:
+                    current = current.setdefault(part, {})
+                current[parts[-1]] = value
+
+        return result
+
     def read_key(
         self, key, value=None, save=True, secret=True, expire_time=None, *args, **kwargs
     ) -> str:
@@ -296,6 +321,10 @@ def write_secret(value, cate1, cate2="", cate3="", cate4="", cate5="", *args, **
         *args,
         **kwargs,
     )
+
+
+def list_sectet(secret=True):
+    return cache_manage().list_secret(secret=secret)
 
 
 def _syc_secret_db(manage1, manage2):
