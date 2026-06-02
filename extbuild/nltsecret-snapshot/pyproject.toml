@@ -1,6 +1,6 @@
 [project]
 name = "nltsecret-snapshot"
-version = "1.4.74"
+version = "1.4.75"
 description = "nltsecret"
 readme = "README.md"
 requires-python = ">=3.8"
