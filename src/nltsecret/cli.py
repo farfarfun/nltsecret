@@ -1,8 +1,10 @@
-from typing import Dict, List, Union, Optional
+from pathlib import Path
+from typing import Dict, List, Optional, Union
 
 import typer
 
 from nltsecret import (
+    SecretManage,
     list_sectet,
     load_secret_db,
     read_secret,
@@ -63,6 +65,20 @@ def write(
 def list_command() -> None:
     for path in _iter_secret_paths(list_sectet()):
         typer.echo(" ".join(path))
+
+
+@app.command()
+def info() -> None:
+    manage = SecretManage()
+    secret_paths = list(_iter_secret_paths(list_sectet()))
+    engine_url = manage.engine.url.render_as_string(hide_password=False)
+
+    typer.echo(f"backend: {manage.engine.url.get_backend_name()}")
+    typer.echo(f"database_url: {engine_url}")
+    if manage.engine.url.get_backend_name() == "sqlite" and manage.engine.url.database:
+        typer.echo(f"database_file: {Path(manage.engine.url.database).expanduser()}")
+    typer.echo(f"secret_count: {len(secret_paths)}")
+    typer.echo(f"cipher_key_configured: {'yes' if bool(manage.cipher_key) else 'no'}")
 
 
 @app.command()
