@@ -10,6 +10,7 @@ from .fernet import (
 from .secret import (
     SecretManage,
     SecretTable,
+    clear_secret_db,
     list_sectet,
     load_secret_db,
     read_secret,
@@ -31,6 +32,7 @@ __all__ = [
     "file_encrypt",
     "SecretManage",
     "SecretTable",
+    "clear_secret_db",
     "list_sectet",
     "load_secret_db",
     "read_secret",

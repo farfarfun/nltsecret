@@ -5,6 +5,7 @@ import typer
 
 from nltsecret import (
     SecretManage,
+    clear_secret_db,
     list_sectet,
     load_secret_db,
     read_secret,
@@ -14,6 +15,7 @@ from nltsecret import (
 
 app = typer.Typer(help="nltsecret command line interface")
 SecretTree = Dict[str, Union[str, "SecretTree"]]
+MYSQL_EXAMPLE_URL = "mysql+pymysql://username:password@127.0.0.1:3306/nltsecret"
 
 
 @app.callback()
@@ -79,6 +81,19 @@ def info() -> None:
         typer.echo(f"database_file: {Path(manage.engine.url.database).expanduser()}")
     typer.echo(f"secret_count: {len(secret_paths)}")
     typer.echo(f"cipher_key_configured: {'yes' if bool(manage.cipher_key) else 'no'}")
+    typer.echo(f"mysql_example_url: {MYSQL_EXAMPLE_URL}")
+
+
+@app.command()
+def clear(
+    yes: bool = typer.Option(False, "--yes", help="Clear all secrets without confirmation"),
+) -> None:
+    if not yes:
+        confirmed = typer.confirm("This will delete all stored secrets. Continue?", default=False)
+        if not confirmed:
+            raise typer.Exit(code=1)
+    clear_secret_db()
+    typer.echo("cleared")
 
 
 @app.command()

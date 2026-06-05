@@ -352,3 +352,8 @@ def save_secret_db(url=None, cipher_key=None):
     manage1 = SecretManage(url=url, cipher_key=cipher_key)
     manage2 = cache_manage()
     _syc_secret_db(manage2, manage1)
+
+
+def clear_secret_db(url=None, cipher_key=None):
+    manage = SecretManage(url=url, cipher_key=cipher_key)
+    SecretTable.delete_all(manage.engine)
