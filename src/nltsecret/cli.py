@@ -1,15 +1,32 @@
-from typing import List, Optional
+from typing import Dict, List, Union, Optional
 
 import typer
 
-from nltsecret import load_secret_db, read_secret, save_secret_db, write_secret
+from nltsecret import (
+    list_sectet,
+    load_secret_db,
+    read_secret,
+    save_secret_db,
+    write_secret,
+)
 
 app = typer.Typer(help="nltsecret command line interface")
+SecretTree = Dict[str, Union[str, "SecretTree"]]
 
 
 @app.callback()
 def main() -> None:
     """nltsecret command group."""
+
+
+def _iter_secret_paths(tree: SecretTree, prefix: Optional[List[str]] = None):
+    prefix = prefix or []
+    for key, value in tree.items():
+        path = prefix + [key]
+        if isinstance(value, dict):
+            yield from _iter_secret_paths(value, path)
+        else:
+            yield path
 
 
 @app.command()
@@ -40,6 +57,12 @@ def write(
 
     padded = categories + [""] * (5 - len(categories))
     write_secret(value, *padded)
+
+
+@app.command(name="list")
+def list_command() -> None:
+    for path in _iter_secret_paths(list_sectet()):
+        typer.echo(" ".join(path))
 
 
 @app.command()
