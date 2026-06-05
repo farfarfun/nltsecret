@@ -327,14 +327,20 @@ def list_sectet(secret=True):
     return cache_manage().list_secret(secret=secret)
 
 
-def _syc_secret_db(manage1, manage2):
+def _syc_secret_db(manage1, manage2, source_secret=True, target_secret=True):
     with Session(manage2.engine) as session:
         pbar = tqdm(manage1.scalars())
         success = 0
         for entity in pbar:
             try:
-                entity.key = manage2.encrypt(manage1.decrypt(entity.key))
-                entity.value = manage2.encrypt(manage1.decrypt(entity.value))
+                entity.key = manage2.encrypt(
+                    manage1.decrypt(entity.key, secret=source_secret),
+                    secret=target_secret,
+                )
+                entity.value = manage2.encrypt(
+                    manage1.decrypt(entity.value, secret=source_secret),
+                    secret=target_secret,
+                )
                 entity.upsert(session)
                 success += 1
                 pbar.set_description(f"success: {success}")
@@ -345,13 +351,13 @@ def _syc_secret_db(manage1, manage2):
 def load_secret_db(url=None, cipher_key=None):
     manage1 = SecretManage(url=url, cipher_key=cipher_key)
     manage2 = cache_manage()
-    _syc_secret_db(manage1, manage2)
+    _syc_secret_db(manage1, manage2, source_secret=cipher_key is not None)
 
 
 def save_secret_db(url=None, cipher_key=None):
     manage1 = SecretManage(url=url, cipher_key=cipher_key)
     manage2 = cache_manage()
-    _syc_secret_db(manage2, manage1)
+    _syc_secret_db(manage2, manage1, target_secret=cipher_key is not None)
 
 
 def clear_secret_db(url=None, cipher_key=None):
